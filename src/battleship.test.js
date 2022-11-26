@@ -36,11 +36,69 @@ expect (booty.isSunk()).toBe(true)
 
 })
 
-//a ship of xyz length [head---->tail] can be placed on the board
-//ship occupies the correct number of spaces on the board
-//the ship's tail does not fall off of the gameboard
-//the spaces on the board all reference back to the same origin ship
-//test this by hitting a ship on the head, and see if the tail registers the same number of hits
-//multiple ships can be placed on the board
-//ship can be placed in x-plane 
-//ship can be placed on y plane
+
+test('A ship of XYZ length [head---> tail] can be placed on the board', ()=>{
+    let board = new Gameboard;
+    let ship = new Ship('battleship',4);
+    board.initializeBoard();
+    board.placeShip(ship,[0,3]);
+    expect (board.board[0][3]).toBe(ship);
+    expect (board.board[0][0]).toBe(ship);
+})
+
+test('ship occupies the correct number of spaces on the board', ()=>{
+    let board = new Gameboard;
+    let ship = new Ship('carrier',5);
+    board.initializeBoard();
+    board.placeShip(ship,[3,5]);
+    expect (board.board[3][5]).toBe(ship);
+    expect (board.board[3][1]).toBe(ship);
+})
+
+test('the ship tail does not fall off of the gameboard', ()=>{
+    let board = new Gameboard;
+    let ship = new Ship('carrier',5);
+    board.initializeBoard();
+    expect(()=>{board.placeShip(ship,[3,3])}).toThrowError();
+
+})
+
+test('the spaces on the board all reference back to the same origin ship', ()=>{
+    let board = new Gameboard;
+    let ship = new Ship('carrier',5);
+    board.initializeBoard();
+    board.placeShip(ship,[3,5]);
+    board.receiveAttack([3,5])
+    board.receiveAttack([3,1])
+    expect(ship.hits).toBe(2);
+})
+
+test('multiple ships can be placed on the board', ()=>{
+    let board = new Gameboard;
+    let ship$1 = new Ship('carrier',5);
+    let ship$2 = new Ship('battleship',4);
+    board.initializeBoard();
+    board.placeShip(ship$1,[3,5]);
+    board.placeShip(ship$2,[9,9]);
+    expect (board.board[3][5]).toBe(ship$1);
+    expect (board.board[3][1]).toBe(ship$1);
+    expect (board.board[9][9]).toBe(ship$2);
+    expect (board.board[9][6]).toBe(ship$2);
+    expect (board.board[9][5]).toBe(0);
+})
+
+test('ship can be placed in x-plane by switching board orientation key', ()=>{
+    let board = new Gameboard;
+    let ship$1 = new Ship('carrier',5);
+    let ship$2 = new Ship('battleship',4);
+    board.initializeBoard();
+    board.orientation='X'
+    board.placeShip(ship$1,[3,5]);
+    
+    expect (board.board[3][5]).toBe(ship$1);
+    expect (board.board[7][5]).toBe(ship$1);
+    expect (()=>{board.placeShip(ship$2,[9,9])}).toThrowError();
+    expect (board.board[3][4]).toBe(0);
+})
+
+

@@ -1,37 +1,4 @@
-// import {Ship} from "./createShip.js"
-class Whip {
-    constructor(ship,length){
-        this.ship = ship
-        this.length = length
-        this.hits = 0
-        this.sunkStatus = false;
-    }
-
-    hit(){
-     
-        if(this.sunkStatus===true){
-            throw Error('ship has already sustained max dmg')
-        }
-
-        this.hits +=1     
-
-        if(this.hits===this.length){
-           
-            this.isSunk();
-            console.log(`you just sunk a ${this.ship}!!!!`)
-            return this.sunkStatus
-        }
-
-    }
-    isSunk(){
-        if(this.hits===this.length){
-            this.sunkStatus=true;
-    }
-    return this.sunkStatus;
-    }
-    
-}
-
+import {Ship} from "./createShip.js"
 
 class Gameboard{
     constructor(){
@@ -137,7 +104,7 @@ function checkY(coord,length,board){
 }
 
 
-
+export {Gameboard}
 
 
 
@@ -146,7 +113,7 @@ function checkY(coord,length,board){
 let booty = new Gameboard;
 booty.initializeBoard();
 console.log(booty.board);
-let myShip = new Whip('battleship',4);
+let myShip = new Ship('battleship',4);
 
 console.log(checkY([0,4],4,booty.board))
 console.log(booty.orientation)
@@ -155,5 +122,5 @@ booty.receiveAttack([5,9])
 booty.receiveAttack([5,6])
 booty.receiveAttack([5,7])
 booty.receiveAttack([5,8])
-console.log(booty.board);
+console.log(booty.board)
 
