@@ -5,6 +5,7 @@ class Gameboard{
         this.board = []
         this.size = 10
         this.orientation = 'Y';
+        this.ships = []
     }
 
     initializeBoard(){
@@ -21,15 +22,21 @@ class Gameboard{
 
         if (orientation==='X'){
             if(checkX(coord,length,board)===true){
+                this.ships.push(ship);
                 for (let i = 0;i<length;i++){
                     board[x+i][y]=ship;
+                    ship.placed=true
+                   
                 }
             }
         }
         else if (orientation==='Y'){
             if(checkY(coord,length,board)===true){
+                this.ships.push(ship);
                 for (let i = 0;i<length;i++){
                     board[x][y-i]=ship;
+                    ship.placed=true
+                    
                 }
             }
         }
@@ -44,15 +51,24 @@ class Gameboard{
             return board[x][y]=1
         }
 
-        if (board[x][y]===1){
+        if (board[x][y]===1||board[x][y]===2){
             return 'choose another square'
         }
 
         else {board[x][y].hit();
-        board[x][y]=1
+        board[x][y]=2
         }
 
     }
+
+    checkAllSunk(){
+        for(let i = 0;i<this.ships.length;i++){
+            if (this.ships[i].sunkStatus===false)
+            {return false}
+        }
+        return true
+ 
+}
 
 
 
@@ -114,13 +130,19 @@ let booty = new Gameboard;
 booty.initializeBoard();
 console.log(booty.board);
 let myShip = new Ship('battleship',4);
-
+let otherShip = new Ship('battleship',4);
 console.log(checkY([0,4],4,booty.board))
 console.log(booty.orientation)
 booty.placeShip(myShip,[5,9])
+booty.placeShip(otherShip,[0,5])
 booty.receiveAttack([5,9])
 booty.receiveAttack([5,6])
 booty.receiveAttack([5,7])
 booty.receiveAttack([5,8])
 console.log(booty.board)
+booty.receiveAttack([5,8]);
+
+console.log(booty.ships);
+
+booty.checkAllSunk();
 

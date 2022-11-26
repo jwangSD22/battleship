@@ -101,4 +101,42 @@ test('ship can be placed in x-plane by switching board orientation key', ()=>{
     expect (board.board[3][4]).toBe(0);
 })
 
+test('gameboard registers all playing pieces in its .ships key', ()=>{
+    let board = new Gameboard;
+    board.initializeBoard();
+    let ship$1 = new Ship('carrier',5);
+    let ship$2 = new Ship('battleship',4);
+    board.placeShip(ship$1,[3,5]);
+    board.placeShip(ship$2,[9,9]);
+    expect(board.ships.length).toBe(2);
+    expect(board.ships[0]).toBe(ship$1);
+    expect(board.ships[1]).toBe(ship$2);
+    board.receiveAttack([9,9]);
+    expect(board.ships[1].hits).toBe(1);
+    board.receiveAttack([9,6]);
+    expect(board.ships[1].hits).toBe(2);
 
+})
+
+test('does checkAllSunk method correctly determine if all boats are sunk',()=>{
+    let board1 = new Gameboard;
+    board1.initializeBoard();
+    let board2 = new Gameboard;
+    board2.initializeBoard()
+    let ship$1 = new Ship('patrol',1);
+    let ship$2 = new Ship('patrol',1);
+    let ship$3 = new Ship('patrol',1);
+    let ship$4 = new Ship('patrol',1);
+    board1.placeShip(ship$1,[0,0])
+    board1.placeShip(ship$2,[9,9])
+    board2.placeShip(ship$3,[0,0])
+    board2.placeShip(ship$4,[9,9])
+    board1.receiveAttack([0,0])
+    board1.receiveAttack([9,9])
+    board2.receiveAttack([0,0])
+    expect(board1.checkAllSunk()).toBe(true)
+    expect(board2.checkAllSunk()).toBe(false)
+
+
+
+})
