@@ -1,37 +1,31 @@
 class Ship {
-    constructor(ship,length){
-        this.ship = ship
-        this.length = length
-        this.hits = 0
-        this.sunkStatus = false;
-        this.placed = false
+  constructor(ship, length) {
+    this.ship = ship;
+    this.length = length;
+    this.hits = 0;
+    this.sunkStatus = false;
+    this.placed = false;
+  }
+
+  hit() {
+    if (this.sunkStatus === true) {
+      throw Error("ship has already sustained max dmg");
     }
 
-    hit(){
-     
-        if(this.sunkStatus===true){
-            throw Error('ship has already sustained max dmg')
-        }
+    this.hits += 1;
 
-        this.hits +=1     
-
-        if(this.hits===this.length){
-           
-            this.isSunk();
-            console.log(`you just sunk a ${this.ship}!!!!`)
-            return this.sunkStatus
-        }
-
+    if (this.hits === this.length) {
+      this.isSunk();
+      console.log(`you just sunk a ${this.ship}!!!!`);
+      return this.sunkStatus;
     }
-    isSunk(){
-        if(this.hits===this.length){
-            this.sunkStatus=true;
+  }
+  isSunk() {
+    if (this.hits === this.length) {
+      this.sunkStatus = true;
     }
     return this.sunkStatus;
-    }
-    
+  }
 }
 
-
-
-export {Ship}
+export { Ship };
