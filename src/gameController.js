@@ -68,6 +68,7 @@ export default class GameController {
       this.p2.receiveAttack(coord);
 
       if (this.p2.checkAllSunk()) {
+       
         return this.winnerFound(this.p1);
       }
 
@@ -81,6 +82,7 @@ export default class GameController {
 
         this.p1.receiveAttack(coord);
         if (this.p1.checkAllSunk()) {
+          
           return this.winnerFound(this.p2);
         }
       }
@@ -88,7 +90,10 @@ export default class GameController {
     }
   }
 
-  winnerFound(winner) {}
+  winnerFound(winner) {
+    console.log(winner.name)
+    alert(`${winner.name} WINS!!`)
+  }
 
   resetBoard() {
     this.p1 = new Gameboard();
