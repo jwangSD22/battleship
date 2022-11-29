@@ -228,22 +228,27 @@ function preBattle(game){
   msgBox.innerHTML = ''
   let startBtn = document.createElement('div')
   startBtn.id = 'startBtn'
+  startBtn.className = 'placeBtns'
   startBtn.innerText = 'Start Battle!'
 
   let resetBtn = document.createElement('div')
-  resetBtn.id = resetBtn
+  resetBtn.id = "resetBtn"
+  resetBtn.className = 'placeBtns'
   resetBtn.innerText = 'Reset Board'
 
   startBtn.addEventListener('click',()=>{
-    placementContainer.style.display = 'none'
+  placementContainer.style.display = 'none'
   mainBody.style.display = 'flex'
     render(game);
   })
 
+  resetBtn.addEventListener('click',()=>{
+    newGameSetup()
+
+  })
+
     msgBox.appendChild(startBtn);
     msgBox.appendChild(resetBtn);
-
-
 
 
 }

@@ -6,7 +6,6 @@ import {oriSwitch, render,resetField,newGameSetup} from "./domController.js"
 
 (function setupOpening (){
     let openingContainer = document.querySelector('.openingContainer')
-    console.log(openingContainer)
     let div = document.createElement('div')
     div.id = "startGameButton"
     div.innerText = 'START GAME'
