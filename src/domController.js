@@ -9,10 +9,10 @@ function render(game) {
   const coordList = coordListGen();
 
   for (let i = 0; i < 100; i++) {
-    let p1Div = divMaker(p1Array[i],game.p1.cpu);
+    let p1Div = divMaker(p1Array[i], game.p1.cpu);
     p1Div.setAttribute("id", `${coordList[i]}`);
 
-    let p2Div = divMaker(p2Array[i],game.p2.cpu);
+    let p2Div = divMaker(p2Array[i], game.p2.cpu);
     p2Div.setAttribute("id", `${coordList[i]}`);
     p2Div.addEventListener("click", () => {
       game.p1MakeAttack([`${coordList[i][1]}`, `${coordList[i][2]}`]);
@@ -60,25 +60,24 @@ function newGameSetup() {
   game.p1.name = "PLAYER 1";
   renderPlaceGrid(game);
   let btn = document.querySelector(".orientationButton");
-  let auto = document.getElementById('autofill')
+  let auto = document.getElementById("autofill");
   btn.addEventListener("click", () => {
     oriSwitch(game);
     renderPlaceGrid(game);
   });
 
-  auto.addEventListener('click',()=>{
+  auto.addEventListener("click", () => {
     game.autoGenerate(game.p1, game.p1Queue, game.p1RdyStatus);
     renderPlaceGrid(game);
-
-  })
+  });
 }
 
-function divMaker(value,cpuStatus) {
+function divMaker(value, cpuStatus) {
   let blankDiv = document.createElement("div");
   blankDiv.className = "box0";
 
   let blankPlayerDiv = document.createElement("div");
-  blankPlayerDiv.classname = "box0NoHov"
+  blankPlayerDiv.className = "boxNoHov";
 
   let missDiv = document.createElement("div");
   missDiv.className = "box1";
@@ -89,38 +88,28 @@ function divMaker(value,cpuStatus) {
   let shipDiv = document.createElement("div");
   shipDiv.className = "boxShip";
 
-  if(cpuStatus===false){
+  if (cpuStatus === false) {
+    if (value == 2) {
+      return hitDiv;
+    } else if (value == 1) {
+      return missDiv;
+    } else if (typeof value === "object") {
+      return shipDiv;
+    } else {
+       return blankPlayerDiv;
+    }
+  }
 
-  if (value == 2) {
- 
-    return hitDiv;
-  } else if (value == 1) {
-    return missDiv;
-  } else if (typeof(value)==='object'){
-    return shipDiv
-  } 
-    else {
-    return blankPlayerDiv;
+  if (cpuStatus === true) {
+    if (value == 2) {
+      return hitDiv;
+    } else if (value == 1) {
+      return missDiv;
+    } else {
+      return blankDiv;
+    }
   }
 }
-
-if (cpuStatus === true){
-  if (value == 2) {
- 
-    return hitDiv;
-  } else if (value == 1) {
-    return missDiv;
-  } 
-    else {
-    return blankDiv;
-  }
-}
-
-}
-
-
-
-
 
 function renderPlaceGrid(game) {
   wipePlaceGrid();
@@ -263,6 +252,10 @@ function preBattle(game) {
   resetBtn.innerText = "Reset Board";
 
   startBtn.addEventListener("click", () => {
+
+    if(game.p1.p1RdyStatus!=true||game.p2.p2RdyStatus!=true){
+          game.autoGenerate(game.p2, game.p2Queue, game.p2RdyStatus);
+    }
     placementContainer.style.display = "none";
     mainBody.style.display = "flex";
     render(game);
