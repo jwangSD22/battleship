@@ -9,10 +9,10 @@ function render(game) {
   const coordList = coordListGen();
 
   for (let i = 0; i < 100; i++) {
-    let p1Div = divMaker(p1Array[i]);
+    let p1Div = divMaker(p1Array[i],game.p1.cpu);
     p1Div.setAttribute("id", `${coordList[i]}`);
 
-    let p2Div = divMaker(p2Array[i]);
+    let p2Div = divMaker(p2Array[i],game.p2.cpu);
     p2Div.setAttribute("id", `${coordList[i]}`);
     p2Div.addEventListener("click", () => {
       game.p1MakeAttack([`${coordList[i][1]}`, `${coordList[i][2]}`]);
@@ -60,16 +60,25 @@ function newGameSetup() {
   game.p1.name = "PLAYER 1";
   renderPlaceGrid(game);
   let btn = document.querySelector(".orientationButton");
+  let auto = document.getElementById('autofill')
   btn.addEventListener("click", () => {
     oriSwitch(game);
     renderPlaceGrid(game);
   });
+
+  auto.addEventListener('click',()=>{
+    game.autoGenerate(game.p1, game.p1Queue, game.p1RdyStatus);
+    renderPlaceGrid(game);
+
+  })
 }
 
-function divMaker(value) {
+function divMaker(value,cpuStatus) {
   let blankDiv = document.createElement("div");
   blankDiv.className = "box0";
-  blankDiv.innerHTML = `${value}`;
+
+  let blankPlayerDiv = document.createElement("div");
+  blankPlayerDiv.classname = "box0NoHov"
 
   let missDiv = document.createElement("div");
   missDiv.className = "box1";
@@ -77,17 +86,43 @@ function divMaker(value) {
   let hitDiv = document.createElement("div");
   hitDiv.className = "box2";
 
+  let shipDiv = document.createElement("div");
+  shipDiv.className = "boxShip";
+
+  if(cpuStatus===false){
+
   if (value == 2) {
+ 
     return hitDiv;
   } else if (value == 1) {
     return missDiv;
-  } else {
+  } else if (typeof(value)==='object'){
+    return shipDiv
+  } 
+    else {
+    return blankPlayerDiv;
+  }
+}
+
+if (cpuStatus === true){
+  if (value == 2) {
+ 
+    return hitDiv;
+  } else if (value == 1) {
+    return missDiv;
+  } 
+    else {
     return blankDiv;
   }
 }
 
-function renderPlaceGrid(game) {
+}
 
+
+
+
+
+function renderPlaceGrid(game) {
   wipePlaceGrid();
   const coord = coordListGen();
   let current = game.p1Queue[game.p1Queue.length - 1];
@@ -100,8 +135,8 @@ function renderPlaceGrid(game) {
     let div = document.createElement("div");
     div.setAttribute("id", `${coord[i]}`);
     div.className = "placeDiv";
-    if (game.p1Queue[0]){
-    placementHighlighter(div,current.length,game.p1.orientation);
+    if (game.p1Queue[0]) {
+      placementHighlighter(div, current.length, game.p1.orientation);
     }
     div.addEventListener("click", () => {
       game.p1PlaceShip([x, y]);
@@ -113,12 +148,11 @@ function renderPlaceGrid(game) {
       placeGrid.appendChild(div);
     } else {
       placeGrid.appendChild(div);
-      div.innerText = `${coord[i]}`;
     }
   }
 
   if (game.p1Queue[game.p1Queue.length - 1] === undefined) {
-    //all ships have been placed 
+    //all ships have been placed
     //create two buttons -- start battle && reset board
     preBattle(game);
     return console.log("ready!");
@@ -143,114 +177,103 @@ function oriSwitch(game) {
   }
 }
 
-function placementHighlighter(div,length,orientation) {
-div.addEventListener('mouseover',()=>{
-if(orientation==='X'){
-let x = parseInt(div.id[1])
-let y = parseInt(div.id[2])
+function placementHighlighter(div, length, orientation) {
+  div.addEventListener("mouseover", () => {
+    if (orientation === "X") {
+      let x = parseInt(div.id[1]);
+      let y = parseInt(div.id[2]);
 
-for (let i = 0;i<length;i++){
-  if(x+i>9){return}
-  let findDiv = document.getElementById(`a${x+i}${y}`)
-  if(findDiv.className === 'alreadyPlaced'){return}
-  findDiv.className = 'placeDivHov'
-
-}
-
-
-}
-if(orientation==='Y'){
-  let x = div.id[1]
-  let y = div.id[2]
-  
-  for (let i = 0;i<length;i++){
-    if (y-i<0){return}
-    let findDiv = document.getElementById(`a${x}${y-i}`)
-    if(findDiv.className === 'alreadyPlaced'){return}
-    findDiv.className = 'placeDivHov'
-  
-  }
-  
-
-
-
-}
-
-})
-div.addEventListener('mouseout', ()=>{
-  if(orientation==='X'){
-    let x = parseInt(div.id[1])
-    let y = parseInt(div.id[2])
-    
-    for (let i = 0;i<length;i++){
-      if(x+i>9){return}
-      let findDiv = document.getElementById(`a${x+i}${y}`)
-      if(findDiv.className === 'alreadyPlaced'){return}
-      findDiv.className = 'placeDiv'
-    
-    }
-    
-    
-    }
-    if(orientation==='Y'){
-      let x = div.id[1]
-      let y = div.id[2]
-      
-      for (let i = 0;i<length;i++){
-        if (y-i<0){return}
-        let findDiv = document.getElementById(`a${x}${y-i}`)
-        if(findDiv.className === 'alreadyPlaced'){return}
-        
-        findDiv.className = 'placeDiv'
-      
+      for (let i = 0; i < length; i++) {
+        if (x + i > 9) {
+          return;
+        }
+        let findDiv = document.getElementById(`a${x + i}${y}`);
+        if (findDiv.className === "alreadyPlaced") {
+          return;
+        }
+        findDiv.className = "placeDivHov";
       }
-      
-    
-    
-    
     }
+    if (orientation === "Y") {
+      let x = div.id[1];
+      let y = div.id[2];
 
+      for (let i = 0; i < length; i++) {
+        if (y - i < 0) {
+          return;
+        }
+        let findDiv = document.getElementById(`a${x}${y - i}`);
+        if (findDiv.className === "alreadyPlaced") {
+          return;
+        }
+        findDiv.className = "placeDivHov";
+      }
+    }
+  });
+  div.addEventListener("mouseout", () => {
+    if (orientation === "X") {
+      let x = parseInt(div.id[1]);
+      let y = parseInt(div.id[2]);
 
+      for (let i = 0; i < length; i++) {
+        if (x + i > 9) {
+          return;
+        }
+        let findDiv = document.getElementById(`a${x + i}${y}`);
+        if (findDiv.className === "alreadyPlaced") {
+          return;
+        }
+        findDiv.className = "placeDiv";
+      }
+    }
+    if (orientation === "Y") {
+      let x = div.id[1];
+      let y = div.id[2];
 
+      for (let i = 0; i < length; i++) {
+        if (y - i < 0) {
+          return;
+        }
+        let findDiv = document.getElementById(`a${x}${y - i}`);
+        if (findDiv.className === "alreadyPlaced") {
+          return;
+        }
 
+        findDiv.className = "placeDiv";
+      }
+    }
+  });
 
-})
-
-
-
-return div
+  return div;
 }
 
-function preBattle(game){
-  let mainBody = document.querySelector('.mainBody')
-  let placementContainer = document.querySelector('.placementContainer')
-  let msgBox = document.querySelector(".placementMsgBox")
-  msgBox.innerHTML = ''
-  let startBtn = document.createElement('div')
-  startBtn.id = 'startBtn'
-  startBtn.className = 'placeBtns'
-  startBtn.innerText = 'Start Battle!'
+function preBattle(game) {
+  let mainBody = document.querySelector(".mainBody");
+  let placementContainer = document.querySelector(".placementContainer");
+  let msgBox = document.querySelector(".placementMsgBox");
+  msgBox.innerHTML = "";
+  let startBtn = document.createElement("div");
+  startBtn.id = "startBtn";
+  startBtn.className = "placeBtns";
+  startBtn.innerText = "Start Battle!";
 
-  let resetBtn = document.createElement('div')
-  resetBtn.id = "resetBtn"
-  resetBtn.className = 'placeBtns'
-  resetBtn.innerText = 'Reset Board'
+  let resetBtn = document.createElement("div");
+  resetBtn.id = "resetBtn";
+  resetBtn.className = "placeBtns";
+  resetBtn.innerText = "Reset Board";
 
-  startBtn.addEventListener('click',()=>{
-  placementContainer.style.display = 'none'
-  mainBody.style.display = 'flex'
+  startBtn.addEventListener("click", () => {
+    placementContainer.style.display = "none";
+    mainBody.style.display = "flex";
     render(game);
-  })
+  });
 
-  resetBtn.addEventListener('click',()=>{
-    newGameSetup()
+  resetBtn.addEventListener("click", () => {
+    newGameSetup();
+  });
 
-  })
-
-    msgBox.appendChild(startBtn);
-    msgBox.appendChild(resetBtn);
-
-
+  msgBox.appendChild(startBtn);
+  msgBox.appendChild(resetBtn);
 }
 
 export { oriSwitch, render, resetField, newGameSetup };

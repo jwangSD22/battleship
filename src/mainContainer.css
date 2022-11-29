@@ -83,6 +83,9 @@ body {
     background-color: blanchedalmond;
     cursor:grab;
 }
+.box0NoHov{
+    border: 1px solid black;
+}
 
 
 .box1{
@@ -93,4 +96,10 @@ body {
 .box2{
     border: 1px solid red;
     background:red;
+}
+
+.boxShip{
+    background:black;
+    border: 1px solid black;
+
 }

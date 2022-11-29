@@ -33,6 +33,11 @@
     background-color: red;
 }
 
+.optionsMenu{
+    display:flex;
+    flex-direction: column;;
+}
+
 .orientationButton {
     display:flex;
     cursor:grab;
@@ -44,6 +49,21 @@
     color:red;
     font-weight: bold;
     background-color: aqua;
+}
+
+#autofill {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25px;
+    background-color: greenyellow;
+    color:brown
+}
+
+#autofill:hover{
+    cursor:grab;
+    background-color: brown;
+    color:greenyellow;
 }
 
 .orientationButton:hover {
