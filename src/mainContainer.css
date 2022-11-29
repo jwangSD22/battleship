@@ -67,6 +67,7 @@ body {
 
 .gameGrid {
     display:grid;
+    rotate: -90deg;
     grid-template-columns: repeat(10,50px);
     grid-template-rows: repeat(10,50px);
     height:500px;

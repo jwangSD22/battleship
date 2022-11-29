@@ -72,24 +72,15 @@ function checkX(coord, length, board) {
   //this function checks if the ship can be placed on the X-PLANE
   //ship orientation is west to east
   let x = parseInt(coord[0]);
-   let y = parseInt(coord[1]);
+  let y = parseInt(coord[1]);
 
   if (board[x][y] !== 0) {
     return false;
-    throw new Error("head coord already taken");
   }
 
   for (let j = 0; j < length; j++) {
-
-    if (x +j > 9 || board[x+j][y] !== 0) {
-      
-     
-
+    if (x + j > 9 || board[x + j][y] !== 0) {
       return false;
-
-      throw new Error(
-        "ship and its length can not occupy the space OR falls out of the grid range"
-      );
     }
   }
 
@@ -100,21 +91,15 @@ function checkY(coord, length, board) {
   //this function checks if the ship can be placed on the Y-PLANE
   //ship orientation is north to south
   let x = parseInt(coord[0]);
-  let y = parseInt(coord[1])
+  let y = parseInt(coord[1]);
 
   if (board[x][y] !== 0) {
     return false;
-
-    throw new Error("head coord already taken");
   }
 
   for (let i = 0; i < length; i++) {
     if (board[x][y - i] !== 0 || y - i < 0) {
       return false;
-
-      throw new Error(
-        "ship and its length can not occupy the space OR falls out of the grid range"
-      );
     }
   }
   return true;

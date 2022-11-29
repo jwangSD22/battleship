@@ -55,13 +55,15 @@ function newGameSetup() {
   game.p1Queue = game.generateShipQueue();
   game.p2Queue = game.generateShipQueue();
   // game.autoGenerate(game.p1, game.p1Queue, game.p1RdyStatus);
-//   game.autoGenerate(game.p2, game.p2Queue, game.p2RdyStatus);
+  //   game.autoGenerate(game.p2, game.p2Queue, game.p2RdyStatus);
   game.p2.cpu = true;
   game.p1.name = "PLAYER 1";
-  renderPlaceGrid(game)
-  let btn = document.querySelector('.orientationButton')
-  btn.addEventListener('click',()=>{oriSwitch(game);console.log(`${game.p1.orientation}`)})
-
+  renderPlaceGrid(game);
+  let btn = document.querySelector(".orientationButton");
+  btn.addEventListener("click", () => {
+    oriSwitch(game);
+    renderPlaceGrid(game);
+  });
 }
 
 function divMaker(value) {
@@ -84,60 +86,164 @@ function divMaker(value) {
   }
 }
 
-function renderPlaceGrid(game){
-    wipePlaceGrid();
-    const coord = coordListGen();
-    let current = game.p1Queue[game.p1Queue.length-1]
-    let p1Array = game.p1.board.flat();
-    let placeGrid = document.getElementById('placeGrid')
-    let msgBox = document.querySelector('.placementMsgBox')
-    for(let i = 0; i<100;i++){
-        let x = coord[i][1]
-        let y = coord[i][2]
-        let div = document.createElement('div')
-        div.setAttribute('id',`${coord[i]}`)
-        div.className ='placeDiv'
-        div.addEventListener('click',()=>{
-            game.p1PlaceShip([x,y])
-            renderPlaceGrid(game)
-            
-        })
+function renderPlaceGrid(game) {
 
-        if (typeof (p1Array[i])==='object'){
-            div.className = 'alreadyPlaced'
-            placeGrid.appendChild(div)
-        }
-        else{
-            placeGrid.appendChild(div)
-            div.innerText = `${coord[i]}`
-        }
-
+  wipePlaceGrid();
+  const coord = coordListGen();
+  let current = game.p1Queue[game.p1Queue.length - 1];
+  let p1Array = game.p1.board.flat();
+  let placeGrid = document.getElementById("placeGrid");
+  let msgBox = document.querySelector(".placementMsgBox");
+  for (let i = 0; i < 100; i++) {
+    let x = coord[i][1];
+    let y = coord[i][2];
+    let div = document.createElement("div");
+    div.setAttribute("id", `${coord[i]}`);
+    div.className = "placeDiv";
+    if (game.p1Queue[0]){
+    placementHighlighter(div,current.length,game.p1.orientation);
     }
-    if (game.p1Queue[game.p1Queue.length-1] === undefined){
-        return console.log('ready!')
+    div.addEventListener("click", () => {
+      game.p1PlaceShip([x, y]);
+      renderPlaceGrid(game);
+    });
+
+    if (typeof p1Array[i] === "object") {
+      div.className = "alreadyPlaced";
+      placeGrid.appendChild(div);
+    } else {
+      placeGrid.appendChild(div);
+      div.innerText = `${coord[i]}`;
     }
-    msgBox.innerText = `Place your ${current.ship} (${current.length})`
- 
+  }
+
+  if (game.p1Queue[game.p1Queue.length - 1] === undefined) {
+    //all ships have been placed 
+    //create two buttons -- start battle && reset board
+    preBattle(game);
+    return console.log("ready!");
+  }
+
+  msgBox.innerText = `Place your ${current.ship} (${current.length})`;
 }
 
-function wipePlaceGrid(){
-    let placeGrid = document.getElementById('placeGrid')
+function wipePlaceGrid() {
+  let placeGrid = document.getElementById("placeGrid");
 
-    while(placeGrid.firstChild){
-        placeGrid.removeChild(placeGrid.firstChild)
+  while (placeGrid.firstChild) {
+    placeGrid.removeChild(placeGrid.firstChild);
+  }
+}
+
+function oriSwitch(game) {
+  if (game.p1.orientation === "Y") {
+    game.p1.orientation = "X";
+  } else {
+    game.p1.orientation = "Y";
+  }
+}
+
+function placementHighlighter(div,length,orientation) {
+div.addEventListener('mouseover',()=>{
+if(orientation==='X'){
+let x = parseInt(div.id[1])
+let y = parseInt(div.id[2])
+
+for (let i = 0;i<length;i++){
+  if(x+i>9){return}
+  let findDiv = document.getElementById(`a${x+i}${y}`)
+  if(findDiv.className === 'alreadyPlaced'){return}
+  findDiv.className = 'placeDivHov'
+
+}
+
+
+}
+if(orientation==='Y'){
+  let x = div.id[1]
+  let y = div.id[2]
+  
+  for (let i = 0;i<length;i++){
+    if (y-i<0){return}
+    let findDiv = document.getElementById(`a${x}${y-i}`)
+    if(findDiv.className === 'alreadyPlaced'){return}
+    findDiv.className = 'placeDivHov'
+  
+  }
+  
+
+
+
+}
+
+})
+div.addEventListener('mouseout', ()=>{
+  if(orientation==='X'){
+    let x = parseInt(div.id[1])
+    let y = parseInt(div.id[2])
+    
+    for (let i = 0;i<length;i++){
+      if(x+i>9){return}
+      let findDiv = document.getElementById(`a${x+i}${y}`)
+      if(findDiv.className === 'alreadyPlaced'){return}
+      findDiv.className = 'placeDiv'
+    
+    }
+    
+    
+    }
+    if(orientation==='Y'){
+      let x = div.id[1]
+      let y = div.id[2]
+      
+      for (let i = 0;i<length;i++){
+        if (y-i<0){return}
+        let findDiv = document.getElementById(`a${x}${y-i}`)
+        if(findDiv.className === 'alreadyPlaced'){return}
+        
+        findDiv.className = 'placeDiv'
+      
+      }
+      
+    
+    
+    
     }
 
-}
 
 
-function oriSwitch(game){
-if (game.p1.orientation === "Y"){
-    game.p1.orientation = "X"
-}
-else {game.p1.orientation = "Y"}
+
+
+})
+
+
+
+return div
 }
 
-function placementHighlight(div){
+function preBattle(game){
+  let mainBody = document.querySelector('.mainBody')
+  let placementContainer = document.querySelector('.placementContainer')
+  let msgBox = document.querySelector(".placementMsgBox")
+  msgBox.innerHTML = ''
+  let startBtn = document.createElement('div')
+  startBtn.id = 'startBtn'
+  startBtn.innerText = 'Start Battle!'
+
+  let resetBtn = document.createElement('div')
+  resetBtn.id = resetBtn
+  resetBtn.innerText = 'Reset Board'
+
+  startBtn.addEventListener('click',()=>{
+    placementContainer.style.display = 'none'
+  mainBody.style.display = 'flex'
+    render(game);
+  })
+
+    msgBox.appendChild(startBtn);
+    msgBox.appendChild(resetBtn);
+
+
 
 
 }

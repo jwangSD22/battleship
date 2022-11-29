@@ -54,7 +54,7 @@ export default class GameController {
         //when p1 is done, auto generate computer board // future functionality would pass the turn on to p2
 
         this.autoGenerate(this.p2, this.p2Queue, this.p2RdyStatus);
-
+        this.p2RdyStatus=true;
         return (this.p1RdyStatus = true);
       }
     }
