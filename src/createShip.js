@@ -17,6 +17,7 @@ class Ship {
     if (this.hits === this.length) {
       this.isSunk();
       console.log(`you just sunk a ${this.ship}!!!!`);
+      //dom needs to reflect this 
       return this.sunkStatus;
     }
   }

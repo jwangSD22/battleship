@@ -46,7 +46,7 @@ export default class GameController {
     //this should throw an error and prevent the dequeue from happening if it's a duplicate coord
 
     if (current.placed === false) {
-      return "not successfully placed";
+      return console.log("not successfully placed");
     } else {
       this.p1Queue.pop();
 
@@ -63,7 +63,7 @@ export default class GameController {
   p1MakeAttack(coord) {
     if (this.p2.board[coord[0]][coord[1]] > 0) {
       //RETURNS AN ERROR BECAUSE SPOT NOT ELIGIBLE
-      return "pick a new spot";
+      return console.log('pick another spot')
     } else {
       this.p2.receiveAttack(coord);
 

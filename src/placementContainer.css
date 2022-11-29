@@ -1,0 +1,24 @@
+.placementMsgBox {
+    font-size: 2rem;
+}
+
+.placementContainer{
+     
+    display:none;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height:100%;
+    align-items: center;
+}
+
+#placeGrid {
+    rotate: -90deg;
+}
+
+.placeDiv {
+    border: 1px solid pink;
+}
+
+.alreadyPlaced {
+    background-color: red;
+}

@@ -40,8 +40,8 @@ class Gameboard {
   }
 
   receiveAttack(coord) {
-    let x = coord[0];
-    let y = coord[1];
+    let x = parseInt(coord[0]);
+    let y = parseInt(coord[1]);
     let board = this.board;
     if (board[x][y] === 0) {
       //MISSED SHOT
@@ -71,15 +71,20 @@ class Gameboard {
 function checkX(coord, length, board) {
   //this function checks if the ship can be placed on the X-PLANE
   //ship orientation is west to east
-  let x = coord[0];
-  let y = coord[1];
+  let x = parseInt(coord[0]);
+   let y = parseInt(coord[1]);
+
   if (board[x][y] !== 0) {
     return false;
     throw new Error("head coord already taken");
   }
 
-  for (let i = 0; i < length; i++) {
-    if (x + i > 9 || board[x + i][y] !== 0) {
+  for (let j = 0; j < length; j++) {
+
+    if (x +j > 9 || board[x+j][y] !== 0) {
+      
+     
+
       return false;
 
       throw new Error(
@@ -94,8 +99,8 @@ function checkX(coord, length, board) {
 function checkY(coord, length, board) {
   //this function checks if the ship can be placed on the Y-PLANE
   //ship orientation is north to south
-  let x = coord[0];
-  let y = coord[1];
+  let x = parseInt(coord[0]);
+  let y = parseInt(coord[1])
 
   if (board[x][y] !== 0) {
     return false;
