@@ -16,12 +16,25 @@ function render(game) {
     p2Div.setAttribute("id", `${coordList[i]}`);
     p2Div.addEventListener("click", () => {
       game.p1MakeAttack([`${coordList[i][1]}`, `${coordList[i][2]}`]);
+      pullMsg(game);
       resetField();
       render(game);
     });
 
     p1Grid.appendChild(p1Div);
     p2Grid.appendChild(p2Div);
+  }
+}
+
+function pullMsg(game){
+  let msgBox = document.querySelector(".msgBox")
+  let msg = game.p2.message
+  msgBox.innerText= `${msg}`
+  let p2Grid = document.getElementById('p2Grid')
+
+  if (msg.slice(-4)==='HIT!'){
+  p2Grid.setAttribute('style','animation: blinkHit .02s step-end 18')
+  setTimeout(()=>{p2Grid.setAttribute('style','animation: none')},250);
   }
 }
 
@@ -54,10 +67,9 @@ function newGameSetup() {
   let game = new GameController();
   game.p1Queue = game.generateShipQueue();
   game.p2Queue = game.generateShipQueue();
-  // game.autoGenerate(game.p1, game.p1Queue, game.p1RdyStatus);
-  //   game.autoGenerate(game.p2, game.p2Queue, game.p2RdyStatus);
   game.p2.cpu = true;
   game.p1.name = "PLAYER 1";
+  findName(game);
   renderPlaceGrid(game);
   let btn = document.querySelector(".orientationButton");
   let auto = document.getElementById("autofill");
@@ -70,6 +82,14 @@ function newGameSetup() {
     game.autoGenerate(game.p1, game.p1Queue, game.p1RdyStatus);
     renderPlaceGrid(game);
   });
+}
+
+function findName(game){
+  let p1Name = document.getElementById('p1Name')
+  let p2Name = document.getElementById('p2Name')
+  p1Name.innerText = game.p1.name
+  p2Name.innerText = 'COMPUTER'
+
 }
 
 function divMaker(value, cpuStatus) {
@@ -96,7 +116,7 @@ function divMaker(value, cpuStatus) {
     } else if (typeof value === "object") {
       return shipDiv;
     } else {
-       return blankPlayerDiv;
+      return blankPlayerDiv;
     }
   }
 
@@ -254,9 +274,8 @@ function preBattle(game) {
   resetBtn.innerText = "Reset Board";
 
   startBtn.addEventListener("click", () => {
-
-    if(game.p1.p1RdyStatus!=true||game.p2.p2RdyStatus!=true){
-          game.autoGenerate(game.p2, game.p2Queue, game.p2RdyStatus);
+    if (game.p1.p1RdyStatus != true || game.p2.p2RdyStatus != true) {
+      game.autoGenerate(game.p2, game.p2Queue, game.p2RdyStatus);
     }
     placementContainer.style.display = "none";
     mainBody.style.display = "flex";
@@ -266,20 +285,20 @@ function preBattle(game) {
   resetBtn.addEventListener("click", () => {
     game.resetBoard();
     newGameSetup();
-   });
+  });
 
   msgBox.appendChild(startBtn);
   msgBox.appendChild(resetBtn);
 }
 
-function removeOri(){
-  let opMenu = document.querySelector('.optionsMenu')
-  opMenu.style.display = 'none'
-  }
+function removeOri() {
+  let opMenu = document.querySelector(".optionsMenu");
+  opMenu.style.display = "none";
+}
 
-  function showOri(){
-    let opMenu = document.querySelector('.optionsMenu')
-    opMenu.style.display = 'flex'
-  }
+function showOri() {
+  let opMenu = document.querySelector(".optionsMenu");
+  opMenu.style.display = "flex";
+}
 
 export { oriSwitch, render, resetField, newGameSetup };

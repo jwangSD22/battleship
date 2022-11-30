@@ -75,7 +75,6 @@ export default class GameController {
       if (this.p2.cpu === true) {
         let coord = coordRandomizer();
         while (this.p1.board[coord[0]][coord[1]] > 0) {
-          console.log(this.p1.board[coord[0]][coord[1]]);
           let newCoord = coordRandomizer();
           coord = newCoord;
         }
@@ -91,8 +90,22 @@ export default class GameController {
   }
 
   winnerFound(winner) {
-    console.log(winner.name)
-    alert(`${winner.name} WINS!!`)
+  let msgBox = document.getElementById("msgBox")
+  let p1Grid = document.getElementById('p1Grid')
+  let p2Grid = document.getElementById('p2Grid')
+
+  p1Grid.style.pointerEvents = 'none'
+  p2Grid.style.pointerEvents = 'none'
+
+    setTimeout(()=>{
+      msgBox.innerText = `${winner.name} WINS!!`
+    },500)
+
+//add button for new game on a new display div?
+
+//add event listener on the button 
+
+   
   }
 
   resetBoard() {
@@ -124,14 +137,3 @@ function oriRandomizer() {
   return orientation;
 }
 
-function counter(array) {
-  let newArray = array.flat();
-  let counter = 0;
-  for (let i = 0; i < newArray.length; i++) {
-    if (newArray[i] === 1 || newArray[i] === 2) {
-      counter++;
-    }
-  }
-
-  return counter;
-}

@@ -1,3 +1,9 @@
+@keyframes blinkHit {
+    50% {
+        background-color:pink;
+    }
+}
+
 body {
     background-color: darkblue;
     color:aliceblue;

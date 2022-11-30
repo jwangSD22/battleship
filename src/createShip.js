@@ -8,16 +8,23 @@ class Ship {
   }
 
   hit() {
-    if (this.sunkStatus === true) {
-      throw Error("ship has already sustained max dmg");
-    }
+    // if (this.sunkStatus === true) {
+    //   throw Error("ship has already sustained max dmg");
+    // }
 
     this.hits += 1;
 
     if (this.hits === this.length) {
       this.isSunk();
-      console.log(`you just sunk a ${this.ship}!!!!`);
-      //dom needs to reflect this 
+      
+      setTimeout(()=>{
+      let message = document.getElementById('msgBox')
+      message.innerText = `A ${this.ship} was just sunk!!`
+      message.setAttribute('style','animation: blinkHit .02s step-end 18')
+      setTimeout(()=>{message.setAttribute('style','animation: none')},250);
+    },300)
+
+
       return this.sunkStatus;
     }
   }
@@ -28,5 +35,7 @@ class Ship {
     return this.sunkStatus;
   }
 }
+
+
 
 export { Ship };

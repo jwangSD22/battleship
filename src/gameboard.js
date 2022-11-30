@@ -8,6 +8,7 @@ class Gameboard {
     this.ships = [];
     this.cpu = false;
     this.name = "";
+    this.message = "";
   }
 
   placeShip(ship, coord) {
@@ -44,17 +45,18 @@ class Gameboard {
     let y = parseInt(coord[1]);
     let board = this.board;
     if (board[x][y] === 0) {
-      //MISSED SHOT
-      return (board[x][y] = 1);
+      board[x][y] = 1;
+      return (this.message = "Shot Missed. Fire again!");
     }
 
     if (board[x][y] === 1 || board[x][y] === 2) {
       //INVALID SPACE ALREADY FIRED UPON
-      return false;
+      return this.message = "Invalid Space. Fire again!";
     } else {
       board[x][y].hit();
-      //HIT TRIGGERED HERE
-      board[x][y] = 2;
+      this.message = `HIT!`   
+     
+      return (board[x][y] = 2);
     }
   }
 
