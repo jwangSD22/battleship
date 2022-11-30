@@ -112,6 +112,7 @@ function divMaker(value, cpuStatus) {
 }
 
 function renderPlaceGrid(game) {
+  showOri();
   wipePlaceGrid();
   const coord = coordListGen();
   let current = game.p1Queue[game.p1Queue.length - 1];
@@ -143,6 +144,7 @@ function renderPlaceGrid(game) {
   if (game.p1Queue[game.p1Queue.length - 1] === undefined) {
     //all ships have been placed
     //create two buttons -- start battle && reset board
+    removeOri();
     preBattle(game);
     return console.log("ready!");
   }
@@ -262,11 +264,22 @@ function preBattle(game) {
   });
 
   resetBtn.addEventListener("click", () => {
+    game.resetBoard();
     newGameSetup();
-  });
+   });
 
   msgBox.appendChild(startBtn);
   msgBox.appendChild(resetBtn);
 }
+
+function removeOri(){
+  let opMenu = document.querySelector('.optionsMenu')
+  opMenu.style.display = 'none'
+  }
+
+  function showOri(){
+    let opMenu = document.querySelector('.optionsMenu')
+    opMenu.style.display = 'flex'
+  }
 
 export { oriSwitch, render, resetField, newGameSetup };
