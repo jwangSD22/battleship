@@ -1,5 +1,6 @@
 import { Gameboard } from "./gameboard.js";
 import { Ship } from "./createShip.js";
+import { winnerFound } from "./domController.js";
 
 //start game check when all ships are placed..
 
@@ -43,9 +44,10 @@ export default class GameController {
   p1PlaceShip(coord) {
     let current = this.p1Queue[this.p1Queue.length - 1];
     this.p1.placeShip(current, coord);
-    //this should throw an error and prevent the dequeue from happening if it's a duplicate coord
 
     if (current.placed === false) {
+      //this prevents dequeue from happening if it's not successfully placed
+
       return console.log("not successfully placed");
     } else {
       this.p1Queue.pop();
@@ -54,7 +56,7 @@ export default class GameController {
         //when p1 is done, auto generate computer board // future functionality would pass the turn on to p2
 
         this.autoGenerate(this.p2, this.p2Queue, this.p2RdyStatus);
-        this.p2RdyStatus=true;
+        this.p2RdyStatus = true;
         return (this.p1RdyStatus = true);
       }
     }
@@ -63,13 +65,12 @@ export default class GameController {
   p1MakeAttack(coord) {
     if (this.p2.board[coord[0]][coord[1]] > 0) {
       //RETURNS AN ERROR BECAUSE SPOT NOT ELIGIBLE
-      return console.log('pick another spot')
+      return console.log("pick another spot");
     } else {
       this.p2.receiveAttack(coord);
 
       if (this.p2.checkAllSunk()) {
-       
-        return this.winnerFound(this.p1);
+        return winnerFound(this.p1, this);
       }
 
       if (this.p2.cpu === true) {
@@ -81,31 +82,11 @@ export default class GameController {
 
         this.p1.receiveAttack(coord);
         if (this.p1.checkAllSunk()) {
-          
-          return this.winnerFound(this.p2);
+          return winnerFound(this.p2, this);
         }
       }
       return;
     }
-  }
-
-  winnerFound(winner) {
-  let msgBox = document.getElementById("msgBox")
-  let p1Grid = document.getElementById('p1Grid')
-  let p2Grid = document.getElementById('p2Grid')
-
-  p1Grid.style.pointerEvents = 'none'
-  p2Grid.style.pointerEvents = 'none'
-
-    setTimeout(()=>{
-      msgBox.innerText = `${winner.name} WINS!!`
-    },500)
-
-//add button for new game on a new display div?
-
-//add event listener on the button 
-
-   
   }
 
   resetBoard() {
@@ -136,4 +117,3 @@ function oriRandomizer() {
   }
   return orientation;
 }
-

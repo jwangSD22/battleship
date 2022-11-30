@@ -1,6 +1,7 @@
 import cssOpen from "./openContainer.css"
 import cssMain from "./mainContainer.css"
 import cssPlacement from "./placementContainer.css"
+import cssWin from "./win.css"
 import GameController from "./gameController.js"
 import {oriSwitch, render,resetField,newGameSetup} from "./domController.js"
 

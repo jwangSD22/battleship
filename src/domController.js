@@ -6,7 +6,7 @@ let p2Grid = document.getElementById("p2Grid");
 function render(game) {
   let p1Array = game.p1.board.flat();
   let p2Array = game.p2.board.flat();
-  const coordList = coordListGen();
+  const coordList = coordListGen('b');
 
   for (let i = 0; i < 100; i++) {
     let p1Div = divMaker(p1Array[i], game.p1.cpu);
@@ -47,11 +47,11 @@ function resetField() {
   }
 }
 
-function coordListGen() {
+function coordListGen(prefix) {
   let array = [];
   for (let i = 0; i < 10; i++) {
     for (let y = 0; y < 10; y++) {
-      let text = "a" + i + y;
+      let text = (prefix||"a") + i + y;
       array.push(text);
     }
   }
@@ -81,7 +81,11 @@ function newGameSetup() {
   auto.addEventListener("click", () => {
     game.autoGenerate(game.p1, game.p1Queue, game.p1RdyStatus);
     renderPlaceGrid(game);
+
+
   });
+
+
 }
 
 function findName(game){
@@ -202,7 +206,7 @@ function placementHighlighter(div, length, orientation) {
         if (findDiv.className === "alreadyPlaced") {
           return;
         }
-        findDiv.className = "placeDivHov";
+        findDiv.setAttribute('class','placeDivHov');
       }
     }
     if (orientation === "Y") {
@@ -299,6 +303,46 @@ function removeOri() {
 function showOri() {
   let opMenu = document.querySelector(".optionsMenu");
   opMenu.style.display = "flex";
+  
 }
 
-export { oriSwitch, render, resetField, newGameSetup };
+function winnerFound(winner,game) {
+  let msgBox = document.getElementById("msgBox")
+  let mainContainer = document.querySelector('.mainContainer')
+  let placementContainer = document.querySelector('.placementContainer')
+  let mainBody = document.querySelector('.mainBody')
+
+
+    setTimeout(()=>{
+      msgBox.innerText = `${winner.name} WINS!!`
+    },500)
+
+
+let winScreen = document.querySelector('.winScreen');
+let winDiv = document.querySelector('.winDiv')
+let reset = document.createElement('div');
+reset.id = 'winButton'
+reset.textContent = 'Play Again?'
+winDiv.appendChild(reset)
+winScreen.style.display = "block"
+mainContainer.style.filter = "brightness(50%)"
+
+reset.addEventListener('click',()=>{
+  mainContainer.style.filter = "brightness(100%)"
+  winScreen.style.display = "none"
+  mainBody.style.display = "none"
+  placementContainer.style.display = "flex"
+  game.resetBoard();
+  game.p2.cpu=true;
+  game.p1.name = 'Player 1'
+  game.p1Queue = game.generateShipQueue();
+  game.p2Queue = game.generateShipQueue();
+  renderPlaceGrid(game);
+  msgBox.innerText = 'BATTLESHIP'
+  winDiv.removeChild(reset)
+  resetField();
+})
+   
+  }
+
+export { oriSwitch, render, resetField, newGameSetup, winnerFound};

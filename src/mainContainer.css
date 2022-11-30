@@ -17,7 +17,7 @@ body {
 
 
 .mainContainer{
-    display:flex;;
+    display:flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -102,10 +102,12 @@ body {
 .box2{
     border: 1px solid red;
     background:red;
+    border-radius: 40%;
 }
 
 .boxShip{
     background:black;
+    border-radius: 40%;
     border: 1px solid black;
 
 }
