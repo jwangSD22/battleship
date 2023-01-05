@@ -101,11 +101,13 @@ export default class GameController {
 
 function coordRandomizer() {
   let array = [0, 0];
-  array[0] = Math.floor(Math.random() * 10);
-  array[1] = Math.floor(Math.random() * 10);
 
-  return array;
+return array.map(item=>item=Math.floor(Math.random()*10))
+
 }
+
+
+console.log(coordRandomizer())
 
 function oriRandomizer() {
   let orientation = "";
